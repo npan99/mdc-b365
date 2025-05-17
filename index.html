@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,39 +48,262 @@
       margin-right: 0.5rem;
       flex-shrink: 0;
     }
-    .bet365-button {
-      background-color: #006633;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      margin-top: 1rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .bet365-button img {
-      width: 24px;
-      height: 24px;
-    }
   </style>
 </head>
 <body>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Logo_Bolavip.svg/2560px-Logo_Bolavip.svg.png" alt="Bolavip" style="display:block;margin:0 auto 1rem auto;width:150px;">
   <h1>Mundial de Clubes 2025</h1>
+  <p>Seleccioná los dos clasificados de cada grupo para avanzar a octavos</p>
   <div class="groups-container" id="fixture"></div>
   <div id="knockout"></div>
   <script>
-    // ... (todo el código del simulador aquí)
+    const odds = {
+      "Real Madrid": 4.5,
+      "Manchester City": 5.5,
+      "PSG": 9.0,
+      "Inter de Milán": 10.0,
+      "Bayern Múnich": 7.0,
+      "Chelsea": 11.0,
+      "Atlético Madrid": 15.0,
+      "Juventus": 26.0,
+      "Borussia Dortmund": 26.0,
+      "Benfica": 34.0,
+      "Palmeiras": 34.0,
+      "Flamengo": 34.0,
+      "Porto": 34.0,
+      "Boca Juniors": 41.0,
+      "River Plate": 41.0,
+      "Fluminense": 51.0,
+      "Botafogo": 51.0,
+      "Inter Miami": 67.0,
+      "Al-Hilal": 67.0,
+      "Seattle Sounders": 101.0,
+      "Salzburgo": 81.0,
+      "Al-Ahly": 126.0,
+      "Urawa Red Diamonds": 151.0,
+      "Pachuca": 151.0,
+      "Monterrey": 251.0,
+      "Al-Ain": 201.0,
+      "Ulsan HD": 201.0,
+      "Esperance": 501.0,
+      "Mamelodi Sundowns": 501.0,
+      "Wydad Casablanca": 501.0,
+      "Auckland City": 1251.0
+    };
+    const teamColors = {
+      "River Plate": ["white", "red"],
+      "Flamengo": ["red", "black"],
+      "Chelsea": ["blue", "white"],
+      "Real Madrid": ["white", "gold"],
+      "Boca Juniors": ["blue", "yellow"],
+      "Palmeiras": ["green", "white"],
+      "Manchester City": ["skyblue", "white"],
+      "Al-Hilal": ["blue", "white"],
+      "PSG": ["navy", "red"],
+      "Monterrey": ["#00529F", "white"],
+      "Porto": ["#001489", "white"],
+      "Al-Ahly": ["red", "gold"],
+      "Inter Miami": ["pink", "black"],
+      "Atlético Madrid": ["red", "white"],
+      "Botafogo": ["black", "white"],
+      "Seattle Sounders": ["#5D9731", "gold"],
+      "Bayern Múnich": ["red", "white"],
+      "Auckland City": ["#000066", "white"],
+      "Benfica": ["red", "white"],
+      "Esperance": ["red", "yellow"],
+      "León": ["green", "white"],
+      "Urawa Red Diamonds": ["red", "black"],
+      "Inter de Milán": ["black", "blue"],
+      "Fluminense": ["brown", "green"],
+      "Borussia Dortmund": ["yellow", "black"],
+      "Ulsan HD": ["blue", "white"],
+      "Mamelodi Sundowns": ["yellow", "green"],
+      "Wydad Casablanca": ["red", "white"],
+      "Al-Ain": ["purple", "white"],
+      "Juventus": ["black", "white"],
+      "Pachuca": ["orange", "white"],
+      "Salzburgo": ["white", "blue"]
+    };
 
-    // Dentro de renderFinal, después del mensaje de cuota:
-    const bet365Btn = document.createElement("a");
-    bet365Btn.href = "https://apuestas.ar.bolavip.com/goto/bet365";
-    bet365Btn.target = "_blank";
-    bet365Btn.className = "bet365-button";
-    bet365Btn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Bet365_logo.svg" alt="Bet365"> Apostá ahora en Bet365`;
-    knockout.appendChild(bet365Btn);
+    const groupsData = [
+      ["Palmeiras", "Porto", "Al-Ahly", "Inter Miami"],
+      ["PSG", "Atlético Madrid", "Botafogo", "Seattle Sounders"],
+      ["Bayern Múnich", "Auckland City", "Boca Juniors", "Benfica"],
+      ["Flamengo", "Chelsea", "Esperance", "León"],
+      ["River Plate", "Monterrey", "Urawa Red Diamonds", "Inter de Milán"],
+      ["Fluminense", "Borussia Dortmund", "Ulsan HD", "Mamelodi Sundowns"],
+      ["Manchester City", "Wydad Casablanca", "Al-Ain", "Juventus"],
+      ["Real Madrid", "Al-Hilal", "Pachuca", "Salzburgo"]
+    ];
+
+    const fixture = document.getElementById("fixture");
+    const knockout = document.getElementById("knockout");
+    const selected = [];
+
+    function createTeamDiv(team, onClick) {
+      const div = document.createElement("div");
+      div.className = "team";
+      const circle = document.createElement("div");
+      circle.className = "circle";
+      const [c1, c2] = teamColors[team] || ["gray", "gray"];
+      circle.style.background = `linear-gradient(to right, ${c1} 50%, ${c2} 50%)`;
+      div.appendChild(circle);
+      div.append(team);
+      if (onClick) div.addEventListener("click", onClick);
+      return div;
+    }
+
+    function renderGroups() {
+      groupsData.forEach((group, groupIndex) => {
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "group";
+        const title = document.createElement("h2");
+        title.textContent = `Grupo ${String.fromCharCode(65 + groupIndex)}`;
+        groupDiv.appendChild(title);
+
+        let selections = [];
+
+        group.forEach(team => {
+          const div = createTeamDiv(team, () => {
+            if (selections.includes(team)) {
+              selections = selections.filter(t => t !== team);
+              div.classList.remove("selected-1", "selected-2");
+              selected.splice(selected.indexOf(team), 1);
+            } else if (selections.length < 2) {
+              selections.push(team);
+              selected.push(team);
+              div.classList.add(selections.length === 1 ? "selected-1" : "selected-2");
+              if (selected.length === 16) renderOctavos();
+            }
+          });
+          groupDiv.appendChild(div);
+        });
+
+        fixture.appendChild(groupDiv);
+      });
+    }
+
+    function renderPhase(titleText, teams, nextCallback) {
+      const title = document.createElement("h2");
+      title.textContent = titleText;
+      knockout.appendChild(title);
+
+      const nextRound = [];
+
+      for (let i = 0; i < teams.length; i += 2) {
+        const match = document.createElement("div");
+        match.className = "group";
+
+        const team1 = teams[i];
+        const team2 = teams[i + 1];
+
+        const div1 = createTeamDiv(team1, () => {
+          div1.classList.add("selected-1");
+          div2.classList.remove("selected-1");
+          nextRound[i / 2] = team1;
+          if (nextRound.filter(Boolean).length === teams.length / 2) nextCallback(nextRound);
+        });
+
+        const div2 = createTeamDiv(team2, () => {
+          div2.classList.add("selected-1");
+          div1.classList.remove("selected-1");
+          nextRound[i / 2] = team2;
+          if (nextRound.filter(Boolean).length === teams.length / 2) nextCallback(nextRound);
+        });
+
+        match.appendChild(div1);
+        match.appendChild(div2);
+        knockout.appendChild(match);
+      }
+    }
+
+    function renderOctavos() {
+      knockout.innerHTML = "";
+      const firsts = [], seconds = [];
+      for (let i = 0; i < selected.length; i += 2) {
+        firsts.push(selected[i]);
+        seconds.push(selected[i + 1]);
+      }
+      const matchups = [
+        [firsts[0], seconds[1]],
+        [firsts[2], seconds[3]],
+        [firsts[4], seconds[5]],
+        [firsts[6], seconds[7]],
+        [firsts[1], seconds[0]],
+        [firsts[3], seconds[2]],
+        [firsts[7], seconds[6]],
+        [firsts[5], seconds[4]]
+      ].flat();
+      renderPhase("Octavos de Final", matchups, renderCuartos);
+    }
+
+    function renderCuartos(winners) {
+      const cuartosMatchups = [
+        winners[0], winners[1],
+        winners[2], winners[3],
+        winners[4], winners[5],
+        winners[6], winners[7]
+      ];
+      renderPhase("Cuartos de Final", cuartosMatchups, renderSemis);
+    }
+
+    function renderSemis(winners) {
+      const semiMatchups = [
+        winners[0], winners[1],
+        winners[2], winners[3]
+      ];
+      renderPhase("Semifinales", semiMatchups, renderFinal);
+    }
+
+    function renderFinal(winners) {
+      renderPhase("Final", winners, (finalistas) => {
+        const champion = finalistas[0];
+
+        const title = document.createElement("h2");
+        title.textContent = `🏆 Campeón: ${champion}`;
+        knockout.appendChild(title);
+
+        const odd = odds[champion] || 'X';
+        const betText = document.createElement("p");
+        betText.textContent = `¿Sabías que si jugaras en Bet365 a que ${champion} es campeón del Mundial de Clubes, ganarías ${odd} por cada peso apostado?`;
+        betText.style.marginTop = "1rem";
+        betText.style.fontSize = "1.1rem";
+        betText.style.maxWidth = "500px";
+        betText.style.marginLeft = "auto";
+        betText.style.marginRight = "auto";
+        knockout.appendChild(betText);
+
+        const betBtn = document.createElement("a");
+        betBtn.href = "https://apuestas.ar.bolavip.com/goto/bet365";
+        betBtn.target = "_blank";
+        betBtn.style.backgroundColor = "#006633";
+        betBtn.style.color = "white";
+        betBtn.style.padding = "0.75rem 1.5rem";
+        betBtn.style.borderRadius = "6px";
+        betBtn.style.fontSize = "1rem";
+        betBtn.style.marginTop = "0.5rem";
+        betBtn.style.display = "inline-flex";
+        betBtn.style.alignItems = "center";
+        betBtn.style.gap = "0.5rem";
+        betBtn.style.textDecoration = "none";
+
+        const logo = document.createElement("img");
+        logo.src = "https://upload.wikimedia.org/wikipedia/commons/5/59/Bet365_logo.svg";
+        logo.alt = "Bet365";
+        logo.style.width = "24px";
+        logo.style.height = "24px";
+        betBtn.appendChild(logo);
+
+        const btnText = document.createTextNode("Apostá ahora en Bet365");
+        betBtn.appendChild(btnText);
+
+        knockout.appendChild(betBtn);
+      });
+    }
+
+    renderGroups();
   </script>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Logo_Bolavip.svg/2560px-Logo_Bolavip.svg.png" alt="Bolavip" style="display:block;margin:2rem auto 0 auto;width:150px;">
 </body>
 </html>
+
