@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador Mundial de Clubes FIFA 2025</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    .groups-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      justify-content: center;
+    }
+    .group {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+      margin-bottom: 1rem;
+    }
+    .team {
+      display: flex;
+      align-items: center;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #333;
+    }
+    .team.selected-1 {
+      background-color: #2a9d8f;
+    }
+    .team.selected-2 {
+      background-color: #e9c46a;
+    }
+    .circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+    .bet365-button {
+      background-color: #006633;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .bet365-button img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mundial de Clubes 2025</h1>
+  <div class="groups-container" id="fixture"></div>
+  <div id="knockout"></div>
+  <script>
+    // ... (todo el código del simulador aquí)
+
+    // Dentro de renderFinal, después del mensaje de cuota:
+    const bet365Btn = document.createElement("a");
+    bet365Btn.href = "https://apuestas.ar.bolavip.com/goto/bet365";
+    bet365Btn.target = "_blank";
+    bet365Btn.className = "bet365-button";
+    bet365Btn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Bet365_logo.svg" alt="Bet365"> Apostá ahora en Bet365`;
+    knockout.appendChild(bet365Btn);
+  </script>
+</body>
+</html>
