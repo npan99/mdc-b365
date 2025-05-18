@@ -77,7 +77,14 @@
   <h1>Mundial de Clubes 2025</h1>
   <p>Seleccioná los dos clasificados de cada grupo para avanzar a octavos</p>
   <div class="groups-container" id="fixture"></div>
-  <div id="knockout"></div>
+  <div id="knockout-wrapper">
+    <img src="bolavip.png" alt="Bolavip" style="display:block;margin:0 auto 1rem auto;width:150px;">
+    <img src="Bet365_logo.png" alt="Bet365" style="display:block;margin:0 auto 1rem auto;width:100px;">
+    <div id="knockout"></div>
+  </div>
+    <img src="bolavip.png" alt="Bolavip" style="display:block;margin:0 auto 1rem auto;width:150px;">
+    <div id="knockout"></div>
+  </div>
   <script>
     // INICIO código funcional completo
 
@@ -299,7 +306,7 @@
       resetBtn.textContent = "🔄 Reiniciar simulador";
 
       shareBtn.addEventListener("click", () => {
-        html2canvas(document.body).then(canvas => {
+        html2canvas(document.getElementById("knockout-wrapper"), {useCORS: true}).then(canvas => {
           const image = canvas.toDataURL("image/png");
           const blob = dataURLtoBlob(image);
           const file = new File([blob], "simulador.png", { type: "image/png" });
@@ -311,7 +318,7 @@
               files: [file]
             });
           } else {
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent("¡Mirá cómo me quedó el simulador del Mundial de Clubes 2025!")}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent("¡Mirá cómo me quedó el simulador del Mundial de Clubes 2025! Jugá vos también en el simulador de Bolavip: https://mdc2025.vercel.app")}`;
             window.open(whatsappUrl, "_blank");
           }
         });
@@ -336,7 +343,10 @@
     }
   </script>
   <img src="bolavip.png" alt="Bolavip" style="display:block;margin:2rem auto 0 auto;width:150px;">
+<img src="Bet365_logo.png" alt="Bet365" style="display:block;margin:2rem auto 0 auto;width:100px;">
+<p style="margin-top:2rem; font-size:0.9rem; color:#ccc;">Presentado por <strong>Bet365</strong> 🟢🟡🟢</p>
 </body>
 </html>
+
 
 
