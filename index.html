@@ -48,6 +48,28 @@
       margin-right: 0.5rem;
       flex-shrink: 0;
     }
+    .button-container {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .button-container button {
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .share-btn {
+      background-color: #25D366;
+      color: white;
+    }
+    .reset-btn {
+      background-color: #666;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -57,73 +79,11 @@
   <div class="groups-container" id="fixture"></div>
   <div id="knockout"></div>
   <script>
-    const odds = {
-      "Real Madrid": 4.5,
-      "Manchester City": 5.5,
-      "PSG": 9.0,
-      "Inter de Milán": 10.0,
-      "Bayern Múnich": 7.0,
-      "Chelsea": 11.0,
-      "Atlético Madrid": 15.0,
-      "Juventus": 26.0,
-      "Borussia Dortmund": 26.0,
-      "Benfica": 34.0,
-      "Palmeiras": 34.0,
-      "Flamengo": 34.0,
-      "Porto": 34.0,
-      "Boca Juniors": 41.0,
-      "River Plate": 41.0,
-      "Fluminense": 51.0,
-      "Botafogo": 51.0,
-      "Inter Miami": 67.0,
-      "Al-Hilal": 67.0,
-      "Seattle Sounders": 101.0,
-      "Salzburgo": 81.0,
-      "Al-Ahly": 126.0,
-      "Urawa Red Diamonds": 151.0,
-      "Pachuca": 151.0,
-      "Monterrey": 251.0,
-      "Al-Ain": 201.0,
-      "Ulsan HD": 201.0,
-      "Esperance": 501.0,
-      "Mamelodi Sundowns": 501.0,
-      "Wydad Casablanca": 501.0,
-      "Auckland City": 1251.0
-    };
-    const teamColors = {
-      "River Plate": ["white", "red"],
-      "Flamengo": ["red", "black"],
-      "Chelsea": ["blue", "white"],
-      "Real Madrid": ["white", "gold"],
-      "Boca Juniors": ["blue", "yellow"],
-      "Palmeiras": ["green", "white"],
-      "Manchester City": ["skyblue", "white"],
-      "Al-Hilal": ["blue", "white"],
-      "PSG": ["navy", "red"],
-      "Monterrey": ["#00529F", "white"],
-      "Porto": ["#001489", "white"],
-      "Al-Ahly": ["red", "gold"],
-      "Inter Miami": ["pink", "black"],
-      "Atlético Madrid": ["red", "white"],
-      "Botafogo": ["black", "white"],
-      "Seattle Sounders": ["#5D9731", "gold"],
-      "Bayern Múnich": ["red", "white"],
-      "Auckland City": ["#000066", "white"],
-      "Benfica": ["red", "white"],
-      "Esperance": ["red", "yellow"],
-      "León": ["green", "white"],
-      "Urawa Red Diamonds": ["red", "black"],
-      "Inter de Milán": ["black", "blue"],
-      "Fluminense": ["brown", "green"],
-      "Borussia Dortmund": ["yellow", "black"],
-      "Ulsan HD": ["blue", "white"],
-      "Mamelodi Sundowns": ["yellow", "green"],
-      "Wydad Casablanca": ["red", "white"],
-      "Al-Ain": ["purple", "white"],
-      "Juventus": ["black", "white"],
-      "Pachuca": ["orange", "white"],
-      "Salzburgo": ["white", "blue"]
-    };
+    // INICIO código funcional completo
+
+    const fixture = document.getElementById("fixture");
+    const knockout = document.getElementById("knockout");
+    const selected = [];
 
     const groupsData = [
       ["Palmeiras", "Porto", "Al-Ahly", "Inter Miami"],
@@ -136,9 +96,7 @@
       ["Real Madrid", "Al-Hilal", "Pachuca", "Salzburgo"]
     ];
 
-    const fixture = document.getElementById("fixture");
-    const knockout = document.getElementById("knockout");
-    const selected = [];
+    const teamColors = { "River Plate": ["white", "red"], "Flamengo": ["red", "black"], "Chelsea": ["blue", "white"], "Real Madrid": ["white", "gold"], "Boca Juniors": ["blue", "yellow"], "Palmeiras": ["green", "white"], "Manchester City": ["skyblue", "white"], "Al-Hilal": ["blue", "white"], "PSG": ["navy", "red"], "Monterrey": ["#00529F", "white"], "Porto": ["#001489", "white"], "Al-Ahly": ["red", "gold"], "Inter Miami": ["pink", "black"], "Atlético Madrid": ["red", "white"], "Botafogo": ["black", "white"], "Seattle Sounders": ["#5D9731", "gold"], "Bayern Múnich": ["red", "white"], "Auckland City": ["#000066", "white"], "Benfica": ["red", "white"], "Esperance": ["red", "yellow"], "León": ["green", "white"], "Urawa Red Diamonds": ["red", "black"], "Inter de Milán": ["black", "blue"], "Fluminense": ["brown", "green"], "Borussia Dortmund": ["yellow", "black"], "Ulsan HD": ["blue", "white"], "Mamelodi Sundowns": ["yellow", "green"], "Wydad Casablanca": ["red", "white"], "Al-Ain": ["purple", "white"], "Juventus": ["black", "white"], "Pachuca": ["orange", "white"], "Salzburgo": ["white", "blue"] };
 
     function createTeamDiv(team, onClick) {
       const div = document.createElement("div");
@@ -238,32 +196,54 @@
     }
 
     function renderCuartos(winners) {
-      const cuartosMatchups = [
-        winners[0], winners[1],
-        winners[2], winners[3],
-        winners[4], winners[5],
-        winners[6], winners[7]
-      ];
-      renderPhase("Cuartos de Final", cuartosMatchups, renderSemis);
+      renderPhase("Cuartos de Final", winners, renderSemis);
     }
 
     function renderSemis(winners) {
-      const semiMatchups = [
-        winners[0], winners[1],
-        winners[2], winners[3]
-      ];
-      renderPhase("Semifinales", semiMatchups, renderFinal);
+      renderPhase("Semifinales", winners, renderFinal);
     }
 
     function renderFinal(winners) {
-      renderPhase("Final", winners, (finalistas) => {
+      renderPhase("Final", winners, finalistas => {
         const champion = finalistas[0];
-
         const title = document.createElement("h2");
         title.textContent = `🏆 Campeón: ${champion}`;
         knockout.appendChild(title);
 
-        const odd = odds[champion] || 'X';
+        const odd = {
+          "Real Madrid": 4.5,
+          "Manchester City": 5.5,
+          "PSG": 9.0,
+          "Inter de Milán": 10.0,
+          "Bayern Múnich": 7.0,
+          "Chelsea": 11.0,
+          "Atlético Madrid": 15.0,
+          "Juventus": 26.0,
+          "Borussia Dortmund": 26.0,
+          "Benfica": 34.0,
+          "Palmeiras": 34.0,
+          "Flamengo": 34.0,
+          "Porto": 34.0,
+          "Boca Juniors": 41.0,
+          "River Plate": 41.0,
+          "Fluminense": 51.0,
+          "Botafogo": 51.0,
+          "Inter Miami": 67.0,
+          "Al-Hilal": 67.0,
+          "Seattle Sounders": 101.0,
+          "Salzburgo": 81.0,
+          "Al-Ahly": 126.0,
+          "Urawa Red Diamonds": 151.0,
+          "Pachuca": 151.0,
+          "Monterrey": 251.0,
+          "Al-Ain": 201.0,
+          "Ulsan HD": 201.0,
+          "Esperance": 501.0,
+          "Mamelodi Sundowns": 501.0,
+          "Wydad Casablanca": 501.0,
+          "Auckland City": 1251.0
+        }[champion] || 'X';
+
         const betText = document.createElement("p");
         betText.textContent = `¿Sabías que si jugaras en Bet365 a que ${champion} es campeón del Mundial de Clubes, ganarías ${odd} por cada peso apostado?`;
         betText.style.marginTop = "1rem";
@@ -298,12 +278,65 @@
         betBtn.appendChild(btnText);
 
         knockout.appendChild(betBtn);
+
+        agregarBotonesFinales();
       });
     }
 
     renderGroups();
+    // FIN código funcional completo
+
+    function agregarBotonesFinales() {
+      const btnContainer = document.createElement("div");
+      btnContainer.className = "button-container";
+
+      const shareBtn = document.createElement("button");
+      shareBtn.className = "share-btn";
+      shareBtn.textContent = "📤 Compartir por WhatsApp";
+
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "reset-btn";
+      resetBtn.textContent = "🔄 Reiniciar simulador";
+
+      shareBtn.addEventListener("click", () => {
+        html2canvas(document.body).then(canvas => {
+          const image = canvas.toDataURL("image/png");
+          const blob = dataURLtoBlob(image);
+          const file = new File([blob], "simulador.png", { type: "image/png" });
+
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+              title: "Mi predicción para el Mundial de Clubes",
+              text: "¡Mirá cómo me quedó el simulador del Mundial de Clubes!",
+              files: [file]
+            });
+          } else {
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent("¡Mirá cómo me quedó el simulador del Mundial de Clubes 2025!")}`;
+            window.open(whatsappUrl, "_blank");
+          }
+        });
+      });
+
+      resetBtn.addEventListener("click", () => {
+        location.reload();
+      });
+
+      btnContainer.appendChild(shareBtn);
+      btnContainer.appendChild(resetBtn);
+      document.getElementById("knockout").appendChild(btnContainer);
+    }
+
+    function dataURLtoBlob(dataurl) {
+      const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      for (let i = 0; i < n; i++) {
+          u8arr[i] = bstr.charCodeAt(i);
+      }
+      return new Blob([u8arr], {type:mime});
+    }
   </script>
   <img src="bolavip.png" alt="Bolavip" style="display:block;margin:2rem auto 0 auto;width:150px;">
 </body>
 </html>
+
 
